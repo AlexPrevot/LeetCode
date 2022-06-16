@@ -1,24 +1,20 @@
 class Solution {
 public:
-    int solve(string& text1, string& text2, vector<vector<int>>& mem, int x, int y) {
-        if (x >= mem.size() || y >= mem[0].size()) return 0;
-        if (mem[x][y] > -1) return mem[x][y];
+    int longestCommonSubsequence(string& s1, string& s2) {
+        int n = s1.size();
+        int m = s2.size();
+        short mem[n + 1][m + 1];
+        memset(mem, 0, (m + 1) * (n + 1) * sizeof(short));
 
 
-        int ans = 0;
+        for (int i = 1; i < n + 1; i++) {
+            for (int j = 1; j < m + 1; j++) {
+                if (s1[i - 1] == s2[j - 1]) mem[i][j] = 1 + mem[i - 1][j - 1];
+                else mem[i][j] = max(mem[i - 1][j], mem[i][j - 1]);
+            }
+        }
 
-        if (text1[x] == text2[y]) ans = solve(text1, text2, mem, x + 1, y + 1) + 1;
-        else ans = max(solve(text1, text2, mem, x + 1, y), solve(text1, text2, mem, x, y + 1));
+        return mem[n][m];
 
-        mem[x][y] = ans;
-
-        return mem[x][y];
-    }
-
-
-    int longestCommonSubsequence(string& text1, string& text2) {
-        vector<vector<int>> mem(text1.size(), vector<int>(text2.size(), -1));
-
-        return solve(text1, text2, mem, 0, 0);
     }
 };
